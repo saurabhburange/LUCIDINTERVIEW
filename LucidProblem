@@ -1,0 +1,26 @@
+def contentretrival(paths):
+    dictionary={}
+        res=[]
+        for x in paths:
+            ls = x.split(' ')
+            r = ls[0]
+            for j in range(1, len(ls)):
+                content = ls[j].split('(')[1][:-1]
+                file = r + '/' + ls[j].split('(')[0]
+                if content not in dictionary:
+                    dictionary[content] = [file]
+                else:
+                    dictionary[content] += [file]
+                    
+        for i in dictionary.values():
+            if len(i) > 1:
+                res.append(i)
+        return res
+                    
+
+newpath = ["root/a 1.txt(abcd) 2.txt(efgh)","root/c 3.txt(abcd)","root/c/d 4.txt(efgh)","root 4.txt(efgh)"]
+
+print(contentretrival(newpath))
+
+
+    
