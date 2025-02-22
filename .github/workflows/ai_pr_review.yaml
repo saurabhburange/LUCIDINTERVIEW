@@ -1,0 +1,38 @@
+name: AI PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  ai_review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Google Cloud SDK
+        run: |
+          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > gcp-key.json
+          gcloud auth activate-service-account --key-file=gcp-key.json
+          gcloud config set project your-gcp-project-id
+
+      - name: Get PR Details
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          REPO=${{ github.repository }}
+          echo "Fetching PR $PR_NUMBER from $REPO"
+
+          # Fetch changed files
+          CHANGED_FILES=$(gh pr view $PR_NUMBER --json files -q '.files[].path')
+          echo "Changed files: $CHANGED_FILES"
+
+          # Save to a file
+          echo "$CHANGED_FILES" > pr_files.txt
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run AI Review
+        run: python .github/scripts/ai_review.py
