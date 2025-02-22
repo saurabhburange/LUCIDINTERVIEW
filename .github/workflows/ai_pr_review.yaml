@@ -44,5 +44,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Debug File Structure
+        run: ls -R $GITHUB_WORKSPACE
+
       - name: Run AI Review
         run: python $GITHUB_WORKSPACE/.github/scripts/ai_pr_review.py pr_content.txt
