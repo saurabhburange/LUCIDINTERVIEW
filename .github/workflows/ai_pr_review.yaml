@@ -12,6 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
       - name: Install Google Cloud SDK
         run: |
           echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 --decode > gcp-key.json
@@ -26,13 +31,18 @@ jobs:
 
           # Fetch changed files
           CHANGED_FILES=$(gh pr view $PR_NUMBER --json files -q '.files[].path')
-          echo "Changed files: $CHANGED_FILES"
 
-          # Save to a file
-          echo "$CHANGED_FILES" > pr_files.txt
+          # Get actual file content and save it
+          echo "Fetching file contents..."
+          for file in $CHANGED_FILES; do
+            echo "Processing: $file"
+            gh api repos/$REPO/contents/$file \
+              --jq '.content' | base64 --decode >> pr_content.txt
+            echo -e "\n\n" >> pr_content.txt
+          done
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run AI Review
-        run: python .github/scripts/ai_review.py
+        run: python .github/scripts/ai_review.py < pr_content.txt
