@@ -45,4 +45,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run AI Review
-        run: python .github/scripts/ai_review.py < pr_content.txt
+        run: python .github/scripts/ai_pr_review.py < pr_content.txt
