@@ -4,7 +4,8 @@ import vertexai
 from vertexai.generative_models import GenerativeModel
 
 # Set Google Cloud authentication
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "keyfile.json"
+keyfile_path = os.path.join(os.getenv("GITHUB_WORKSPACE", ""), "gcp-key.json")
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = keyfile_path
 
 def call_vertex_ai(pr_data):
     vertexai.init(project="carbide-acre-451700-g8", location="us-central1")
