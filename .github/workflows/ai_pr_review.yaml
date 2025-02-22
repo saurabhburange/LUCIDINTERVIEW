@@ -22,25 +22,21 @@ jobs:
           echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 --decode > gcp-key.json
           gcloud auth activate-service-account --key-file=gcp-key.json
           gcloud config set project carbide-acre-451700-g8
+          
+      - name: Install GitHub CLI
+        run: |
+          sudo apt update
+          sudo apt install gh
 
       - name: Get PR Details
         run: |
+          gh auth status  # Check authentication
           PR_NUMBER=${{ github.event.pull_request.number }}
           REPO=${{ github.repository }}
           echo "Fetching PR $PR_NUMBER from $REPO"
-
-          # Fetch changed files
           CHANGED_FILES=$(gh pr view $PR_NUMBER --json files -q '.files[].path')
-
-          # Get actual file content and save it
-          echo "Fetching file contents..."
-          for file in $CHANGED_FILES; do
-            echo "Processing: $file"
-            gh api repos/$REPO/contents/$file \
-              --jq '.content' | base64 --decode >> pr_content.txt
-            echo -e "\n\n" >> pr_content.txt
-          done
-
+          echo "Changed files: $CHANGED_FILES"
+          echo "$CHANGED_FILES" > pr_files.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
