@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 --decode > gcp-key.json
           gcloud auth activate-service-account --key-file=gcp-key.json
-          gcloud config set project carbide-acre-451700-g8]
+          gcloud config set project carbide-acre-451700-g8
 
       - name: Get PR Details
         run: |
