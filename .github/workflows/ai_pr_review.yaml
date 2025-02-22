@@ -48,4 +48,5 @@ jobs:
         run: ls -R $GITHUB_WORKSPACE
 
       - name: Run AI Review
-        run: python $GITHUB_WORKSPACE/.github/scripts/ai_pr_review.py pr_content.txt
+        run: python $GITHUB_WORKSPACE/ai_pr_review.py pr_content.txt
+
