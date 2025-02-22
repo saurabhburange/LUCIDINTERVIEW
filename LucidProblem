@@ -1,4 +1,5 @@
 def contentretrival(paths):
+    #this is an method for the central metadata app
     dictionary={}
         res=[]
         for x in paths:
