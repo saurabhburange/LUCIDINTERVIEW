@@ -22,21 +22,27 @@ jobs:
           echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 --decode > gcp-key.json
           gcloud auth activate-service-account --key-file=gcp-key.json
           gcloud config set project carbide-acre-451700-g8
-          
+
       - name: Install GitHub CLI
         run: |
           sudo apt update
           sudo apt install gh
 
-      - name: Get PR Details
+      - name: Get PR Diff and Commit Message
         run: |
-          gh auth status  # Check authentication
           PR_NUMBER=${{ github.event.pull_request.number }}
           REPO=${{ github.repository }}
-          echo "Fetching PR $PR_NUMBER from $REPO"
-          CHANGED_FILES=$(gh pr view $PR_NUMBER --json files -q '.files[].path')
-          echo "Changed files: $CHANGED_FILES"
-          echo "$CHANGED_FILES" > pr_files.txt
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+
+          echo "Fetching PR diff for #$PR_NUMBER from $REPO"
+          
+          # Fetch PR diff (actual code changes)
+          gh pr diff $PR_NUMBER > pr_diff.txt
+          
+          # Fetch commit message (if needed for AI review)
+          gh pr view $PR_NUMBER --json commits -q '.commits[-1].message' > commit_message.txt
+
+          echo "PR diff and commit message saved."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -49,5 +55,18 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run AI Review
-        run: python $GITHUB_WORKSPACE/ai_pr_review.py pr_content.txt
+        run: python $GITHUB_WORKSPACE/ai_pr_review.py pr_diff.txt commit_message.txt
 
+      - name: Comment AI Review on PR
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          REPO=${{ github.repository }}
+
+          echo "Posting AI review feedback on PR #$PR_NUMBER"
+
+          # Read AI output and format it properly for a PR comment
+          AI_FEEDBACK=$(cat ai_feedback.json | jq -r '. | tojson')
+
+          gh pr comment $PR_NUMBER --body "### 🤖 AI Code Review Feedback 🚀\n\`\`\`json\n$AI_FEEDBACK\n\`\`\`"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
