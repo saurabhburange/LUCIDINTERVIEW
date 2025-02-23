@@ -52,7 +52,7 @@ def call_vertex_ai(pr_data, commit_message=None):
         "Warning": [ "Warning 1 description", "Warning 2 description" ],
         "Info": [ "Info 1 description", "Info 2 description" ]
     }}
-    Do not include any extra text before or after the JSON.
+    Do not include any extra text before or after the JSON.Ensure that the response is valid JSON and does not include markdown or extra formatting.
     """
 
     response = model.generate_content(prompt)
