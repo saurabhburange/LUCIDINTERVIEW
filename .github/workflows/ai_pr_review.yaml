@@ -56,6 +56,15 @@ jobs:
 
       - name: Run AI Review
         run: python $GITHUB_WORKSPACE/ai_pr_review.py pr_diff.txt commit_message.txt
+      
+      - name: Delete Existing AI Comment
+        if: contains(steps.get-comments.outputs.data, 'AI Code Review Feedback')
+        run: |
+          COMMENT_ID=$(echo '${{ steps.get-comments.outputs.data }}' | jq -r '.[] | select(.body | contains("AI Code Review Feedback")) | .id')
+          if [ "$COMMENT_ID" != "null" ]; then
+            curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                 "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/comments/$COMMENT_ID"
+          fi
 
       - name: Comment AI Review on PR
         run: |
