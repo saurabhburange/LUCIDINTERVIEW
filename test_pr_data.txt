@@ -1,3 +1,5 @@
-def add_numbers(a, b):
-    # This function adds two numbers
-    return a + b
++ def contentretrival(paths):
++    res = []
++    for path in paths:
++        res.append(path) # Appends path instead of content
++    return res
