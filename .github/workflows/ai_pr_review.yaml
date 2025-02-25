@@ -74,7 +74,8 @@ jobs:
           echo "Posting AI review feedback on PR #$PR_NUMBER"
 
           # Read AI output and format it properly for a PR comment
-          AI_FEEDBACK=$(cat ai_feedback.json | jq -r '. | tojson')
+          # AI_FEEDBACK=$(cat ai_feedback.json | jq -r '. | tojson')
+          AI_FEEDBACK= ai_feedback.txt
 
           gh pr comment $PR_NUMBER --body "### 🤖 AI Code Review Feedback 🚀\n\`\`\`json\n$AI_FEEDBACK\n\`\`\`"
         env:
