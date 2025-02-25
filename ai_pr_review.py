@@ -115,7 +115,7 @@ if __name__ == "__main__":
 
     feedback = call_vertex_ai(pr_data, commit_message)
 
-    print(feedback, "sburange")
+    # print(feedback, "sburange")
 
     # Save feedback as JSON for GitHub Action to consume
 
