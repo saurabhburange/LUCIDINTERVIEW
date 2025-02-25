@@ -7,24 +7,9 @@ import textwrap
 import re
 
 def clean_text(text):
-    # Remove unnecessary spaces and newlines
-    text = text.strip()
-    
-    # Wrap text to a fixed width (optional)
-    wrapped_text = "\n".join(textwrap.wrap(text, width=80))
-    
-    return wrapped_text
-
-def clean_text2(text):
-    # Remove '#' symbols
     text = text.replace('#', '')
-    
-    # Replace '\n' with a space and ensure proper formatting
     text = re.sub(r'\s*\n\s*', ' ', text)
-    
-    # Ensure proper bullet point formatting
     text = re.sub(r'\*', '-', text)
-    
     return text.strip()
 
 # Set Google Cloud authentication
@@ -92,7 +77,7 @@ def call_vertex_ai(pr_data, commit_message=None):
     # print(response.text, 'SBURANGEEEE!!!!---------XXXXXXXXXXXXXX-----------------')
 
 
-    clean_response = clean_text2(response.text)
+    clean_response = clean_text(response.text)
 
     return clean_response
 
@@ -140,6 +125,6 @@ if __name__ == "__main__":
     if clean_feedback.startswith('"') and clean_feedback.endswith('"'):
         clean_feedback = clean_feedback[1:-1]
     with open("ai_feedback.txt", "w", encoding="utf-8") as outfile:
-        json.dump(clean_feedback, outfile, indent=4)
+        json.dump(feedback, outfile, indent=4)
 
     print("\nAI Review Feedback saved to ai_feedback.txt")
