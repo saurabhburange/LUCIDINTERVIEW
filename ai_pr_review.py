@@ -38,7 +38,7 @@ def call_vertex_ai(pr_data, commit_message=None):
     model = GenerativeModel(MODEL_NAME)
 
     prompt = f"""
-    You are an AI code reviewer. Give me a small consise summary and any suggestions. Make it short.
+    You are an AI code reviewer. Give me a small consise summary and any suggestions. Make it short. PR data - {pr_data}
     """
 
     # Force model to return JSON only
