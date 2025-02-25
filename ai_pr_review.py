@@ -4,6 +4,7 @@ import json
 import vertexai
 from vertexai.generative_models import GenerativeModel
 import textwrap
+import re
 
 def clean_text(text):
     # Remove unnecessary spaces and newlines
@@ -13,6 +14,18 @@ def clean_text(text):
     wrapped_text = "\n".join(textwrap.wrap(text, width=80))
     
     return wrapped_text
+
+def clean_text2(text):
+    # Remove '#' symbols
+    text = text.replace('#', '')
+    
+    # Replace '\n' with a space and ensure proper formatting
+    text = re.sub(r'\s*\n\s*', ' ', text)
+    
+    # Ensure proper bullet point formatting
+    text = re.sub(r'\*', '-', text)
+    
+    return text.strip()
 
 # Set Google Cloud authentication
 keyfile_path = os.path.join(os.getenv("GITHUB_WORKSPACE", ""), "gcp-key.json")
@@ -79,7 +92,7 @@ def call_vertex_ai(pr_data, commit_message=None):
     # print(response.text, 'SBURANGEEEE!!!!---------XXXXXXXXXXXXXX-----------------')
 
 
-    clean_response = clean_text(response.text)
+    clean_response = clean_text2(response.text)
 
     return clean_response
 

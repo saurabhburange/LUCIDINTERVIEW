@@ -1,4 +1,24 @@
 x = """
-\n\n"## \ud83e\udd16 AI Code Review Feedback ### Summary: - The code looks good overall, but\nthere are a few minor issues that could be improved. - One issue is that the\nfunction contentretrival seems to be appending the path instead of the content\nto the res list. - Another issue is that there is no docstring for the\ncontentretrival function. ### Suggestions: - Modify the contentretrival\nfunction to append the content of the path to the res list instead of the path\nitself. - Add a docstring to the contentretrival function that describes its\npurpose and parameters. - Additionally, here are some other general\nsuggestions: - Make sure that all of the code is properly formatted and\nindented. - Use meaningful variable and function names. - Add comments\nto your code to explain what it is doing. - Test your code thoroughly to\nmake sure that it is working as expected. ### Response: The feedback was\nhelpful and informative. I made the following changes to the code: - Modified\nthe contentretrival function to append the content of the path to the res\nlist instead of the path itself. - Added a docstring to the contentretrival\nfunction that describes its purpose and parameters. - Made sure that all of the\ncode is properly formatted and indented. - Used meaningful variable and function\nnames. - Added comments to my code to explain what it is doing. - Tested my code\nthoroughly to make sure that it is working as expected. I believe that these\nchanges have improved the code and made it more readable and maintainable.
+AI Code Review Feedback ### Summary: The code looks good overall, but there\nare a few minor issues that could be improved. * One issue is that the function\ncontentretrival seems to be appending the path instead of the content to the\nres list. * Another issue is that there is no docstring for the\ncontentretrival function. ### Suggestions: * Modify the contentretrival\nfunction to append the content of the path to the res list instead of the path\nitself. * Add a docstring to the contentretrival function that describes its\npurpose and parameters. * Additionally, here are some other general suggestions:\n* Make sure that all of the code is properly formatted and indented. * Use\nmeaningful variable and function names. * Add comments to your code to explain\nwhat it is doing. * Test your code thoroughly to make sure that it is working as\nexpected.
 """
 print(x)
+
+
+import re
+
+def clean_text(text):
+    # Remove '#' symbols
+    text = text.replace('#', '')
+    
+    # Replace '\n' with a space and ensure proper formatting
+    text = re.sub(r'\s*\n\s*', ' ', text)
+    
+    # Ensure proper bullet point formatting
+    text = re.sub(r'\*', '-', text)
+    
+    return text.strip()
+
+
+print(clean_text(x))
+
+
