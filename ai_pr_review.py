@@ -37,6 +37,9 @@ def call_vertex_ai(pr_data, commit_message=None):
     vertexai.init(project=PROJECT_ID, location=LOCATION)
     model = GenerativeModel(MODEL_NAME)
 
+
+    print(pr_data, 'log 1')
+
     prompt = f"""
     You are an AI code reviewer. Give me a small consise summary and any suggestions. Make it short. PR data - {pr_data}
     """
@@ -72,7 +75,7 @@ def call_vertex_ai(pr_data, commit_message=None):
     response = model.generate_content(prompt)
 
 
-    print(response.text, 'SBURANGEEEE!!!!---------XXXXXXXXXXXXXX-----------------')
+    # print(response.text, 'SBURANGEEEE!!!!---------XXXXXXXXXXXXXX-----------------')
 
 
     clean_response = clean_text(response.text)
