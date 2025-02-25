@@ -72,7 +72,7 @@ def call_vertex_ai(pr_data, commit_message=None):
     response = model.generate_content(prompt)
 
 
-    clean_response = clean_text(response.txt)
+    clean_response = clean_text(response.text)
 
     return clean_response
 
