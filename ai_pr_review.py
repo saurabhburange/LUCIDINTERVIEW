@@ -88,7 +88,15 @@ if __name__ == "__main__":
     print(feedback, "sburange")
 
     # Save feedback as JSON for GitHub Action to consume
+
+
+    # Ensure the response is clean and free from extra escape characters
+    clean_feedback = feedback.strip().replace('\\n', '\n')
+
+    # Remove leading/trailing quotes if present
+    if clean_feedback.startswith('"') and clean_feedback.endswith('"'):
+        clean_feedback = clean_feedback[1:-1]
     with open("ai_feedback.txt", "w", encoding="utf-8") as outfile:
-        json.dump(feedback, outfile, indent=4)
+        json.dump(clean_feedback, outfile, indent=4)
 
     print("\nAI Review Feedback saved to ai_feedback.txt")
