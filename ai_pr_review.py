@@ -3,6 +3,16 @@ import sys
 import json
 import vertexai
 from vertexai.generative_models import GenerativeModel
+import textwrap
+
+def clean_text(text):
+    # Remove unnecessary spaces and newlines
+    text = text.strip()
+    
+    # Wrap text to a fixed width (optional)
+    wrapped_text = "\n".join(textwrap.wrap(text, width=80))
+    
+    return wrapped_text
 
 # Set Google Cloud authentication
 keyfile_path = os.path.join(os.getenv("GITHUB_WORKSPACE", ""), "gcp-key.json")
@@ -12,6 +22,16 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = keyfile_path
 PROJECT_ID = "carbide-acre-451700-g8"
 LOCATION = "us-central1"
 MODEL_NAME = "gemini-pro"
+
+
+def clean_text(text):
+    # Remove unnecessary spaces and newlines
+    text = text.strip()
+    
+    # Wrap text to a fixed width (optional)
+    wrapped_text = "\n".join(textwrap.wrap(text, width=80))
+    
+    return wrapped_text
 
 def call_vertex_ai(pr_data, commit_message=None):
     vertexai.init(project=PROJECT_ID, location=LOCATION)
@@ -51,7 +71,10 @@ def call_vertex_ai(pr_data, commit_message=None):
 
     response = model.generate_content(prompt)
 
-    return response.text
+
+    clean_response = clean_text(response.txt)
+
+    return clean_response
 
     # try:
     #     # Extract raw response
