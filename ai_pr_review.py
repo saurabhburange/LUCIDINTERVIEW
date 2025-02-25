@@ -14,62 +14,58 @@ LOCATION = "us-central1"
 MODEL_NAME = "gemini-pro"
 
 def call_vertex_ai(pr_data, commit_message=None):
-    """
-    Calls Vertex AI to review the PR code with additional context.
-
-    Parameters:
-        pr_data (str): The PR code diff or changeset.
-        commit_message (str): Optional commit message to validate.
-
-    Returns:
-        dict: Structured AI review feedback.
-    """
     vertexai.init(project=PROJECT_ID, location=LOCATION)
     model = GenerativeModel(MODEL_NAME)
 
-    # Force model to return JSON only
     prompt = f"""
-    You are an AI code reviewer. Analyze the following PR code and provide structured feedback.
-    
-    **Code to Review:**
-    {pr_data}
-
-    **Review Criteria:**
-    - Check for adherence to coding standards (naming conventions, formatting, best practices).
-    - Identify typos, redundant code, or unnecessary complexity.
-    - Validate meaningful function/variable names.
-    - Highlight any potential performance issues.
-    - Ensure compliance with the team's style guide.
-
-    If a commit message is provided, check if it follows the format: '[JR-XXX] Meaningful commit message'.
-
-    **Commit Message:** {commit_message if commit_message else "Not provided"}
-
-    ---
-    Return only a **valid JSON** object formatted as:
-    {{
-        "Critical": [ "Issue 1 description", "Issue 2 description" ],
-        "Warning": [ "Warning 1 description", "Warning 2 description" ],
-        "Info": [ "Info 1 description", "Info 2 description" ]
-    }}
-    Do not include any extra text before or after the JSON.Ensure that the response is valid JSON and does not include markdown or extra formatting.
+    You are an AI code reviewer. Give me a small consise summary and any suggestions. Make it short.
     """
+
+    # Force model to return JSON only
+    # prompt = f"""
+    # You are an AI code reviewer. Analyze the following PR code and provide structured feedback.
+    
+    # **Code to Review:**
+    # {pr_data}
+
+    # **Review Criteria:**
+    # - Check for adherence to coding standards (naming conventions, formatting, best practices).
+    # - Identify typos, redundant code, or unnecessary complexity.
+    # - Validate meaningful function/variable names.
+    # - Highlight any potential performance issues.
+    # - Ensure compliance with the team's style guide.
+
+    # If a commit message is provided, check if it follows the format: '[JR-XXX] Meaningful commit message'.
+
+    # **Commit Message:** {commit_message if commit_message else "Not provided"}
+
+    # ---
+    # Return only a **valid JSON** object formatted as:
+    # {{
+    #     "Critical": [ "Issue 1 description", "Issue 2 description" ],
+    #     "Warning": [ "Warning 1 description", "Warning 2 description" ],
+    #     "Info": [ "Info 1 description", "Info 2 description" ]
+    # }}
+    # Do not include any extra text before or after the JSON.Ensure that the response is valid JSON and does not include markdown or extra formatting.
+    # """
 
     response = model.generate_content(prompt)
 
-    try:
-        # Extract raw response
-        raw_text = response.text.strip()
+    return response.text
 
-        # Fix potential formatting issues
-        if raw_text.startswith("```json"):
-            raw_text = raw_text.replace("```json", "").replace("```", "").strip()
+    # try:
+    #     # Extract raw response
+    #     raw_text = response.text.strip()
 
-        # Parse JSON response
-        feedback_json = json.loads(raw_text)
-        return feedback_json
-    except json.JSONDecodeError:
-        return {"error": "AI response was not valid JSON", "raw_response": response.text}
+    #     # Fix potential formatting issues
+    #     if raw_text.startswith("```json"):
+    #         raw_text = raw_text.replace("```json", "").replace("```", "").strip()
+
+    #     # Parse JSON response
+    #     feedback_json = json.loads(raw_text)
+    #     return feedback_json
+    # except json.JSONDecodeError:
+    #     return {"error": "AI response was not valid JSON", "raw_response": response.text}
 
 if __name__ == "__main__":
     pr_data_file = sys.argv[1] if len(sys.argv) > 1 else None
@@ -92,7 +88,7 @@ if __name__ == "__main__":
     print(feedback, "sburange")
 
     # Save feedback as JSON for GitHub Action to consume
-    with open("ai_feedback.json", "w", encoding="utf-8") as outfile:
+    with open("ai_feedback.txt", "w", encoding="utf-8") as outfile:
         json.dump(feedback, outfile, indent=4)
 
-    print("\nAI Review Feedback saved to ai_feedback.json")
+    print("\nAI Review Feedback saved to ai_feedback.txt")
