@@ -72,6 +72,9 @@ def call_vertex_ai(pr_data, commit_message=None):
     response = model.generate_content(prompt)
 
 
+    print(response.text, 'SBURANGEEEE!!!!---------XXXXXXXXXXXXXX-----------------')
+
+
     clean_response = clean_text(response.text)
 
     return clean_response
