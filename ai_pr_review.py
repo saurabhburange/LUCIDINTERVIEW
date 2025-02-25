@@ -41,7 +41,8 @@ def call_vertex_ai(pr_data, commit_message=None):
     print(pr_data, 'log 1')
 
     prompt = f"""
-    You are an AI code reviewer. Give me a small consise summary and any suggestions. Make it short. PR data - {pr_data}
+    You are an AI code reviewer. Give me a small consise summary and any suggestions. Make it short. PR data - {pr_data}.
+    Please respond only in github markdown language
     """
 
     # Force model to return JSON only
