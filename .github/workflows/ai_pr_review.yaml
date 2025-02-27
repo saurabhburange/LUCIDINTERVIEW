@@ -73,6 +73,6 @@ jobs:
 
           echo "Posting AI review feedback on PR #$PR_NUMBER"
           AI_FEEDBACK=$(cat ai_feedback.txt)
-          gh pr comment $PR_NUMBER --body "### 🤖 AI Code Review Feedback 🚀\n\n$AI_FEEDBACK"
+          gh pr comment $PR_NUMBER --body "### 🤖$AI_FEEDBACK"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
