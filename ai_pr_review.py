@@ -21,13 +21,6 @@ PROJECT_ID = "carbide-acre-451700-g8"
 LOCATION = "us-central1"
 MODEL_NAME = "gemini-pro"
 
-
-# def clean_text(text):
-#     # Remove unnecessary spaces and newlines
-#     text = text.strip()
-#     wrapped_text = "\n".join(textwrap.wrap(text, width=80))
-#     return wrapped_text
-
 def call_vertex_ai(pr_data, commit_message=None):
     vertexai.init(project=PROJECT_ID, location=LOCATION)
     model = GenerativeModel(MODEL_NAME)
@@ -37,16 +30,9 @@ def call_vertex_ai(pr_data, commit_message=None):
 
     prompt = f"""
     You are an AI code reviewer. Give me a small consise summary and any suggestions. Make it short. PR data - {pr_data}.
-    Please respond only in github markdown language. here is the template for your reponse (strictly follow it)
-
-    Template - 
-
-    Here is my AI review - 
     """
 
     response = model.generate_content(prompt)
-
-    # clean_response = clean_text(response.text)
 
     return response.text
 
