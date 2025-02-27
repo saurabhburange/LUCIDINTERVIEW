@@ -22,14 +22,11 @@ LOCATION = "us-central1"
 MODEL_NAME = "gemini-pro"
 
 
-def clean_text(text):
-    # Remove unnecessary spaces and newlines
-    text = text.strip()
-    
-    # Wrap text to a fixed width (optional)
-    wrapped_text = "\n".join(textwrap.wrap(text, width=80))
-    
-    return wrapped_text
+# def clean_text(text):
+#     # Remove unnecessary spaces and newlines
+#     text = text.strip()
+#     wrapped_text = "\n".join(textwrap.wrap(text, width=80))
+#     return wrapped_text
 
 def call_vertex_ai(pr_data, commit_message=None):
     vertexai.init(project=PROJECT_ID, location=LOCATION)
@@ -49,9 +46,9 @@ def call_vertex_ai(pr_data, commit_message=None):
 
     response = model.generate_content(prompt)
 
-    clean_response = clean_text(response.text)
+    # clean_response = clean_text(response.text)
 
-    return clean_response
+    return response.text
 
 
 if __name__ == "__main__":
@@ -78,13 +75,11 @@ if __name__ == "__main__":
 
     feedback1 = feedback.lstrip("#")
 
+    print(feedback1, "sburange")
+
     print('--------------xxxxxxxxxxxxxxxxxxx------------------------')
 
-    # Save feedback as JSON for GitHub Action to consume
 
     with open("ai_feedback.md", "w", encoding="utf-8") as outfile:
-        # json.dump(feedback, outfile, indent=4)
-        # outfile.write("## AI Code Review Feedback\n\n")  # Add a Markdown header
-        # outfile.write("## AI Code Review Feedback\n\n")
         outfile.write(feedback1)
 
