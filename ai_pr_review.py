@@ -80,7 +80,9 @@ if __name__ == "__main__":
 
     # Save feedback as JSON for GitHub Action to consume
 
-    with open("ai_feedback.txt", "w", encoding="utf-8") as outfile:
-        json.dump(feedback, outfile, indent=4)
+    with open("ai_feedback.md", "w", encoding="utf-8") as outfile:
+        # json.dump(feedback, outfile, indent=4)
+        outfile.write("## AI Code Review Feedback\n\n")  # Add a Markdown header
+        outfile.write(feedback)
 
     print("\nAI Review Feedback saved to ai_feedback.txt")
