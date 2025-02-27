@@ -83,6 +83,7 @@ if __name__ == "__main__":
     with open("ai_feedback.md", "w", encoding="utf-8") as outfile:
         # json.dump(feedback, outfile, indent=4)
         outfile.write("## AI Code Review Feedback\n\n")  # Add a Markdown header
+        outfile.write("## AI Code Review Feedback\n\n")
         outfile.write(feedback)
 
     print("\nAI Review Feedback saved to ai_feedback.txt")
