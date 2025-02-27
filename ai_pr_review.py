@@ -43,34 +43,6 @@ def call_vertex_ai(pr_data, commit_message=None):
     Please respond only in github markdown language
     """
 
-    # Force model to return JSON only
-    # prompt = f"""
-    # You are an AI code reviewer. Analyze the following PR code and provide structured feedback.
-    
-    # **Code to Review:**
-    # {pr_data}
-
-    # **Review Criteria:**
-    # - Check for adherence to coding standards (naming conventions, formatting, best practices).
-    # - Identify typos, redundant code, or unnecessary complexity.
-    # - Validate meaningful function/variable names.
-    # - Highlight any potential performance issues.
-    # - Ensure compliance with the team's style guide.
-
-    # If a commit message is provided, check if it follows the format: '[JR-XXX] Meaningful commit message'.
-
-    # **Commit Message:** {commit_message if commit_message else "Not provided"}
-
-    # ---
-    # Return only a **valid JSON** object formatted as:
-    # {{
-    #     "Critical": [ "Issue 1 description", "Issue 2 description" ],
-    #     "Warning": [ "Warning 1 description", "Warning 2 description" ],
-    #     "Info": [ "Info 1 description", "Info 2 description" ]
-    # }}
-    # Do not include any extra text before or after the JSON.Ensure that the response is valid JSON and does not include markdown or extra formatting.
-    # """
-
     response = model.generate_content(prompt)
 
 
@@ -121,13 +93,6 @@ if __name__ == "__main__":
 
     # Save feedback as JSON for GitHub Action to consume
 
-
-    # Ensure the response is clean and free from extra escape characters
-    clean_feedback = feedback.strip().replace('\\n', '\n')
-
-    # Remove leading/trailing quotes if present
-    if clean_feedback.startswith('"') and clean_feedback.endswith('"'):
-        clean_feedback = clean_feedback[1:-1]
     with open("ai_feedback.txt", "w", encoding="utf-8") as outfile:
         json.dump(feedback, outfile, indent=4)
 
