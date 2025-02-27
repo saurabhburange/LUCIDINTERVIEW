@@ -76,6 +76,8 @@ if __name__ == "__main__":
 
     print(feedback, "sburange")
 
+    feedback1 = feedback.lstrip("#")
+
     print('--------------xxxxxxxxxxxxxxxxxxx------------------------')
 
     # Save feedback as JSON for GitHub Action to consume
@@ -84,5 +86,5 @@ if __name__ == "__main__":
         # json.dump(feedback, outfile, indent=4)
         # outfile.write("## AI Code Review Feedback\n\n")  # Add a Markdown header
         # outfile.write("## AI Code Review Feedback\n\n")
-        outfile.write(feedback)
+        outfile.write(feedback1)
 
