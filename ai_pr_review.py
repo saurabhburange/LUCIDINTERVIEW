@@ -40,32 +40,19 @@ def call_vertex_ai(pr_data, commit_message=None):
 
     prompt = f"""
     You are an AI code reviewer. Give me a small consise summary and any suggestions. Make it short. PR data - {pr_data}.
-    Please respond only in github markdown language
+    Please respond only in github markdown language. here is the template for your reponse (strictly follow it)
+
+    Template - 
+
+    Here is my AI review - 
     """
 
     response = model.generate_content(prompt)
-
-
-    # print(response.text, 'SBURANGEEEE!!!!---------XXXXXXXXXXXXXX-----------------')
-
 
     clean_response = clean_text(response.text)
 
     return clean_response
 
-    # try:
-    #     # Extract raw response
-    #     raw_text = response.text.strip()
-
-    #     # Fix potential formatting issues
-    #     if raw_text.startswith("```json"):
-    #         raw_text = raw_text.replace("```json", "").replace("```", "").strip()
-
-    #     # Parse JSON response
-    #     feedback_json = json.loads(raw_text)
-    #     return feedback_json
-    # except json.JSONDecodeError:
-    #     return {"error": "AI response was not valid JSON", "raw_response": response.text}
 
 if __name__ == "__main__":
     pr_data_file = sys.argv[1] if len(sys.argv) > 1 else None
