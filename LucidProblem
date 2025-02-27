@@ -1,3 +1,6 @@
+import random
+
+
 def contentretrival(paths):
     #this is an method for the central metadata app
     dictionary={}
@@ -22,6 +25,17 @@ def contentretrival(paths):
 newpath = ["root/a 1.txt(abcd) 2.txt(efgh)","root/c 3.txt(abcd)","root/c/d 4.txt(efgh)","root 4.txt(efgh)"]
 
 print(contentretrival(newpath))
+
+
+
+adjectives = ["AI-powered", "Blockchain-based", "Decentralized", "Quantum", "Automated", "Cloud-native"]
+nouns = ["Marketplace", "Platform", "Assistant", "Analytics Tool", "Ecosystem", "Service"]
+industries = ["for Healthcare", "for Finance", "for Education", "for Gaming", "for Remote Work", "for Creators"]
+
+idea = f"{random.choice(adjectives)} {random.choice(nouns)} {random.choice(industries)}"
+
+print(f"next: {idea}")
+
 
 
     
