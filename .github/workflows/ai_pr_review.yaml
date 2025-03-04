@@ -36,7 +36,7 @@ jobs:
           echo "Fetching PR diff for #$PR_NUMBER from $REPO"
           gh pr diff $PR_NUMBER > pr_diff.txt
           
-          echo "PR diff saved."
+          echo "PR diff saved"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
