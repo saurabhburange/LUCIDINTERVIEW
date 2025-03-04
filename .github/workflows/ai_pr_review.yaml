@@ -61,30 +61,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # ✅ Step to Delete Previous AI Comment
-      # - name: Delete Existing AI Comment
-      #   run: |
-      #     COMMENT_ID=$(jq -r '.[] | select(.body | contains("🤖 AI Code Review Feedback 🚀")) | .id' comments.json)
-      #     if [ -n "$COMMENT_ID" ] && [ "$COMMENT_ID" != "null" ]; then
-      #       echo "Deleting previous AI comment with ID: $COMMENT_ID"
-      #       gh api --method DELETE "/repos/${{ github.repository }}/issues/comments/$COMMENT_ID"
-      #     else
-      #       echo "No previous AI comment found."
-      #     fi
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Delete Existing AI Comment
         run: |
-          echo "Fetching existing comments..."
-          
-          # Print the comments.json file for debugging
-          cat comments.json
-
-          # Extract the comment ID of the AI feedback comment
           COMMENT_ID=$(jq -r '.[] | select(.body | contains("🤖 AI Code Review Feedback 🚀")) | .id' comments.json)
-          
-          echo "Extracted COMMENT_ID: $COMMENT_ID"
-
           if [ -n "$COMMENT_ID" ] && [ "$COMMENT_ID" != "null" ]; then
             echo "Deleting previous AI comment with ID: $COMMENT_ID"
             gh api --method DELETE "/repos/${{ github.repository }}/issues/comments/$COMMENT_ID"
@@ -94,6 +73,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    
 
       # ✅ Step to Post AI Feedback
       - name: Comment AI Review on PR
