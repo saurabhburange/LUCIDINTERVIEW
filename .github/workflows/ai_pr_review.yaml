@@ -39,8 +39,8 @@ jobs:
           # Fetch PR diff (actual code changes)
           gh pr diff $PR_NUMBER > pr_diff.txt
           
-          # Fetch commit message (if needed for AI review)
-          gh pr view $PR_NUMBER --json commits -q '.commits[-1].message' > commit_message.txt
+          # # Fetch commit message (if needed for AI review)
+          # gh pr view $PR_NUMBER --json commits -q '.commits[-1].message' > commit_message.txt
 
           echo "PR diff and commit message saved."
         env:
@@ -55,7 +55,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run AI Review
-        run: python $GITHUB_WORKSPACE/ai_pr_review.py pr_diff.txt commit_message.txt
+        run: python $GITHUB_WORKSPACE/ai_pr_review.py pr_diff.txt 
+        # commit_message.txt
       
       - name: Delete Existing AI Comment
         if: contains(steps.get-comments.outputs.data, 'AI Code Review Feedback')

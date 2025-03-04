@@ -29,7 +29,7 @@ def call_vertex_ai(pr_data, commit_message=None):
     print(pr_data, 'log 1')
 
     prompt = f"""
-    You are an AI code reviewer. Give me a small consise summary and any suggestions. Make it short. PR data - {pr_data}.
+    You are an AI code reviewer, Give me a small consise summary and any suggestions. Make it short. PR data - {pr_data}.
     """
 
     response = model.generate_content(prompt)
@@ -55,15 +55,15 @@ if __name__ == "__main__":
 
     feedback = call_vertex_ai(pr_data, commit_message)
 
-    print('--------------xxxxxxxxxxxxxxxxxxx------------------------')
+    # print('--------------xxxxxxxxxxxxxxxxxxx------------------------')
 
-    print(feedback, "sburange")
+    # print(feedback, "sburange")
 
     feedback1 = feedback.lstrip("#")
 
-    print(feedback1, "sburange")
+    # print(feedback1, "sburange")
 
-    print('--------------xxxxxxxxxxxxxxxxxxx------------------------')
+    # print('--------------xxxxxxxxxxxxxxxxxxx------------------------')
 
 
     with open("ai_feedback.md", "w", encoding="utf-8") as outfile:
