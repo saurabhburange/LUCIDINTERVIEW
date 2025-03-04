@@ -80,6 +80,6 @@ jobs:
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           AI_FEEDBACK=$(cat ai_feedback.md)
-          gh pr comment $PR_NUMBER --body "### 🤖 $AI_FEEDBACK"
+          gh pr comment $PR_NUMBER --body "### 🤖$AI_FEEDBACK"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
