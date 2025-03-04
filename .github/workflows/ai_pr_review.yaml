@@ -32,17 +32,11 @@ jobs:
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           REPO=${{ github.repository }}
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
           echo "Fetching PR diff for #$PR_NUMBER from $REPO"
-          
-          # Fetch PR diff (actual code changes)
           gh pr diff $PR_NUMBER > pr_diff.txt
           
-          # # Fetch commit message (if needed for AI review)
-          # gh pr view $PR_NUMBER --json commits -q '.commits[-1].message' > commit_message.txt
-
-          echo "PR diff and commit message saved."
+          echo "PR diff saved."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -56,23 +50,34 @@ jobs:
 
       - name: Run AI Review
         run: python $GITHUB_WORKSPACE/ai_pr_review.py pr_diff.txt
-      
-      - name: Delete Existing AI Comment
-        if: contains(steps.get-comments.outputs.data, '🤖')
-        run: |
-          COMMENT_ID=$(echo '${{ steps.get-comments.outputs.data }}' | jq -r '.[] | select(.body | contains("🤖")) | .id')
-          if [ "$COMMENT_ID" != "null" ]; then
-            curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                 "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/comments/$COMMENT_ID"
-          fi
 
+      # ✅ Step to Fetch PR Comments
+      - name: Get Existing PR Comments
+        id: get-comments
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          gh api repos/${{ github.repository }}/issues/${PR_NUMBER}/comments > comments.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ✅ Step to Delete Previous AI Comment
+      - name: Delete Existing AI Comment
+        run: |
+          COMMENT_ID=$(jq -r '.[] | select(.body | contains("🤖 AI Code Review Feedback 🚀")) | .id' comments.json)
+          if [ -n "$COMMENT_ID" ] && [ "$COMMENT_ID" != "null" ]; then
+            echo "Deleting previous AI comment with ID: $COMMENT_ID"
+            gh api --method DELETE "/repos/${{ github.repository }}/issues/comments/$COMMENT_ID"
+          else
+            echo "No previous AI comment found."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ✅ Step to Post AI Feedback
       - name: Comment AI Review on PR
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
-          REPO=${{ github.repository }}
-
-          echo "Posting AI review feedback on PR #$PR_NUMBER"
           AI_FEEDBACK=$(cat ai_feedback.md)
-          gh pr comment $PR_NUMBER --body "### 🤖$AI_FEEDBACK"
+          gh pr comment $PR_NUMBER --body "### 🤖 AI Code Review Feedback 🚀\n\n$AI_FEEDBACK"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
