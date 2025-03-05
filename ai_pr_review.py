@@ -55,15 +55,7 @@ if __name__ == "__main__":
 
     feedback = call_vertex_ai(pr_data, commit_message)
 
-    # print('--------------xxxxxxxxxxxxxxxxxxx------------------------')
-
-    # print(feedback, "sburange")
-
     feedback1 = feedback.lstrip("#")
-
-    # print(feedback1, "sburange")
-
-    # print('--------------xxxxxxxxxxxxxxxxxxx------------------------')
 
 
     with open("ai_feedback.md", "w", encoding="utf-8") as outfile:
