@@ -51,7 +51,6 @@ jobs:
       - name: Run AI Review
         run: python $GITHUB_WORKSPACE/ai_pr_review.py pr_diff.txt
 
-      # ✅ Step to Fetch PR Comments
       - name: Get Existing PR Comments
         id: get-comments
         run: |
@@ -60,7 +59,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # ✅ Step to Delete Previous AI Comment
       - name: Delete Existing AI Comment
         run: |
           COMMENT_ID=$(jq -r '.[] | select(.body | contains("🤖.")) | .id' comments.json)
@@ -73,9 +71,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    
-
-      # ✅ Step to Post AI Feedback
+  
       - name: Comment AI Review on PR
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}

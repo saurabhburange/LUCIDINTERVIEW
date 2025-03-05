@@ -1,5 +1,0 @@
-+ def contentretrival(paths):
-+    res = []
-+    for path in paths:
-+        res.append(path) # Appends path instead of content
-+    return res
